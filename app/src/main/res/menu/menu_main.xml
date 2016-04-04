@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity"
+    >
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon ="@drawable/ic_search_white_24dp"
+        android:showAsAction="always"
+        android:title="@string/action_search" />
+    <item android:id="@+id/action_overflow"
+        android:icon ="@drawable/ic_add_white_48dp"
+        android:title="@string/more_add"
+        android:showAsAction = "always">
+        <!--实现隐藏和下拉菜单，popupwindow和listview都可以实现，但复杂且要布局，对当前活动依赖大-->
+        <menu>
+            <item
+                android:id="@+id/action_groupchat"
+                android:icon ="@drawable/ic_chat_bubble_white_48dp"
+                android:showAsAction="always"
+                android:title="@string/more_group" />
+            <item android:id="@+id/action_add"
+                android:icon ="@drawable/ic_person_add_white_48dp"
+                android:title="@string/more_add"
+                android:showAsAction = "always"/>
+            <item android:id="@+id/action_scan"
+                android:icon ="@drawable/ic_photo_camera_white_24dp"
+                android:title="@string/more_scanner"
+                android:showAsAction = "always"/>
+            <item android:id="@+id/action_deal"
+                android:icon ="@drawable/ic_attach_money_white_24dp"
+                android:title="@string/more_pay"
+                android:showAsAction = "always"/>
+            <item android:id="@+id/action_feedback"
+                android:icon ="@drawable/ic_mail_white_24dp"
+                android:title="@string/more_add"
+                android:showAsAction = "always"/>
+        </menu>
+    </item>
+
+</menu>
