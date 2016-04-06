@@ -1,12 +1,15 @@
-package com.example.location;
+package com.example.location.adapter;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.example.location.fragment.MyListFragment;
+
 /**
  * Created by Administrator on 2016/4/3.
+ * ViewPager的适配器。连接ViewPager和MyListFragment.
  */
 public class MyFragmentAdapter extends FragmentPagerAdapter {
     public final int TOTAL =4;

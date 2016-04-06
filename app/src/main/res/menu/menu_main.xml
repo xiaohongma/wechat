@@ -7,11 +7,13 @@
         android:actionViewClass="android.widget.SearchView"
         android:icon ="@drawable/ic_search_white_24dp"
         android:showAsAction="always"
+
         android:title="@string/action_search" />
-    <item android:id="@+id/action_overflow"
-        android:icon ="@drawable/ic_add_white_48dp"
+    <item
+        android:id ="@+id/action_overflow"
         android:title="@string/more_add"
-        android:showAsAction = "always">
+        android:icon="@drawable/ic_add_white_48dp"
+        android:showAsAction = "ifRoom">
         <!--实现隐藏和下拉菜单，popupwindow和listview都可以实现，但复杂且要布局，对当前活动依赖大-->
         <menu>
             <item
@@ -20,6 +22,7 @@
                 android:showAsAction="always"
                 android:title="@string/more_group" />
             <item android:id="@+id/action_add"
+
                 android:icon ="@drawable/ic_person_add_white_48dp"
                 android:title="@string/more_add"
                 android:showAsAction = "always"/>

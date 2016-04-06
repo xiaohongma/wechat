@@ -1,37 +1,35 @@
-package com.example.location;
+package com.example.location.activity;
 
 //import android.app.Activity;
-import android.app.Activity;
-import android.app.FragmentTransaction;
+
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Rect;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 import android.view.View.OnClickListener;
 import android.widget.SearchView;
-import static android.view.Gravity.TOP;
+//import android.support.v4.widget.SearchViewCompat;
+
+import com.example.location.fragment.SearchFragment;
+import com.example.location.model.Dialog;
+import com.example.location.adapter.MyFragmentAdapter;
+import com.example.location.R;
 
 
 public class MainActivity extends FragmentActivity implements OnClickListener {
@@ -40,12 +38,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     private PopupWindow popupWindow;
     private ListView listView;
     private SearchView search;
+    private MenuItem searchItem;
     private ViewPager pager;
     private View layout;
     private ImageButton wechatButton;
     private ImageButton contactsButton;
     private ImageButton lifeButton;
     private ImageButton myButton;
+    private MenuItem overflow;
+    private Fragment fragment;
 
 
     @Override
@@ -53,7 +54,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getActionBar().setDisplayUseLogoEnabled(false);
+       // getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);//去掉左上角的程序图标
+       //fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_main);
         wechatButton =(ImageButton)findViewById(R.id.button_wechat);
         contactsButton = (ImageButton)findViewById(R.id.button_contacts);
         lifeButton =(ImageButton)findViewById(R.id.button_life);
@@ -63,10 +66,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         lifeButton.setOnClickListener(this);
         myButton.setOnClickListener(this);
         pager =(ViewPager)findViewById(R.id.pager);
-        MyFragmentAdapter myAdapter = new MyFragmentAdapter( getSupportFragmentManager());
-        getFragmentManager();
+        MyFragmentAdapter myAdapter = new MyFragmentAdapter(getSupportFragmentManager());
         pager.setAdapter(myAdapter);
         pager.setCurrentItem(0);
+
 
 
         //initDialog( mPager.setCurrentItem(0););
@@ -77,22 +80,57 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         //contentLayout = (LinearLayout)findViewById(R.id.layout_content);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        //overflow.setVisible(true);
+        return super.onPrepareOptionsMenu(menu);
+
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-      search = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        //search = (SearchView)menu.findItem(R.id.action_search).getActionView();//搜索框
+        searchItem = menu.findItem(R.id.action_search);//搜索框
+        search = (SearchView)searchItem.getActionView();
+        overflow =menu.findItem(R.id.action_overflow);
         search.setOnSearchClickListener(this);
-
 
 
         return true;
     }
 
+    /**
+     * 重写onBackPressed函数，退出搜索框时合上。
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+       // invalidateOptionsMenu();
+        search.setIconified(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        overflow.setVisible(true);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+              // FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+                getSupportFragmentManager().popBackStack();//弹出栈顶的transaction
+                search.setIconified(true);
+                getActionBar().setDisplayHomeAsUpEnabled(false);
+                overflow.setVisible(true);
+                break;
+            case R.id.action_search:
+
+                break;
+
+
+
+        }
 
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -121,11 +159,45 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 
         switch(v.getId()) {
             case R.id.action_search:
-                getActionBar().setDisplayHomeAsUpEnabled(true);
+                getActionBar().setDisplayHomeAsUpEnabled(true);//返回键
+                overflow.setVisible(false);//不显示overflow按钮
+                //overflow.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                //invalidateOptionsMenu();
+
+
+
+                SearchFragment searchFragment = new SearchFragment();//
+                // FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_main, searchFragment);
+
+                transaction.addToBackStack(null);//按下返回键的时候退出当前SearchFragment
+                transaction.commit();
+                break;
+
+
+
+                 /*getActionBar().setDisplayHomeAsUpEnabled(true);//返回键
+                overflow.setVisible(false);//不显示overflow按钮
+                 SearchFragment searchFragment = new SearchFragment();//
+                // FragmentManager fragmentManager = getSupportFragmentManager();
+                 FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_main, searchFragment);
+
+                transaction.addToBackStack(null);//按下返回键的时候退出当前SearchFragment
+                transaction.commit();*/
+
+               // transaction.attach(fragment);
+
+
+               // transaction.replace(R.id.pager,fragment);
+
+                 // Intent i = new Intent(MainActivity.this,SearchFragment.class);
+                //startActivity(i);
+                //   transaction.commit();
+               // setContentView(R.layout.search_field);
               //  Intent i = new Intent(MainActivity.this,SearchActivity.class);
                // startActivity(i);
-
-                break;
             case R.id.button_wechat:
                 pager.setCurrentItem(0);
                 break;
@@ -144,19 +216,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         }
 
     }
-   /*private void  initPopupMenu(){
-
-        View view = getLayoutInflater().inflate(R.layout.action_more,null);
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT,
-               ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        //popupMenu = new PopupMenu();
-
-    }
-    public int Dp2Px(Context context, float dp) {
-               final float scale = context.getResources().getDisplayMetrics().density;
-              return (int) (dp * scale + 0.5f);
-           }*/
 
 }
 

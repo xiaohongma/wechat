@@ -1,6 +1,7 @@
-package com.example.location;
+package com.example.location.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.location.adapter.DialogAdapter;
+import com.example.location.model.Dialog;
+import com.example.location.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +71,7 @@ public class MyListFragment extends ListFragment {
                 list.add(sun8);
                 list.add(sun9);
                 setListAdapter(new DialogAdapter(getActivity(),R.layout.layout_item,list));
+
                 break;
             case 1:
                 v = inflater.inflate(R.layout.fragment_contacts,container,false);
@@ -74,11 +80,12 @@ public class MyListFragment extends ListFragment {
                 break;
             case 2:
                 v = inflater.inflate(R.layout.fragment_life,container,false);
-                initContactsList();;
+                initContactsList();
                 break;
             case 3:
                 v = inflater.inflate(R.layout.fragment_my,container,false);
                 break;
+
             default:
                 v = inflater.inflate(R.layout.fragment_dialog,container,false);
                 break;
@@ -147,4 +154,5 @@ public class MyListFragment extends ListFragment {
     public void initMySettings(){
 
     }
+
 }

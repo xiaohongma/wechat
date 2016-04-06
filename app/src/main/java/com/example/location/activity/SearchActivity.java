@@ -1,9 +1,11 @@
-package com.example.location;
+package com.example.location.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageButton;
+
+import com.example.location.R;
 
 /**
  * Created by Administrator on 2016/4/2.
@@ -16,7 +18,7 @@ public class SearchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.search_field);
+       // setContentView(R.layout.search_field);
         getActionBar().setDisplayShowHomeEnabled(false);//不显示logo
         getActionBar().setDisplayShowTitleEnabled(false);//不显示标题
         //getActionBar().setDisplayHomeAsUpEnabled(true);//显示返回按钮

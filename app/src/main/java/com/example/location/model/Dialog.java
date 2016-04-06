@@ -1,4 +1,4 @@
-package com.example.location;
+package com.example.location.model;
 
 /**
  * Created by Administrator on 2016/3/30.

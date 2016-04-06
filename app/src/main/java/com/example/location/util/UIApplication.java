@@ -1,4 +1,4 @@
-package com.example.location;
+package com.example.location.util;
 
 import android.app.Application;
 import android.view.ViewConfiguration;
